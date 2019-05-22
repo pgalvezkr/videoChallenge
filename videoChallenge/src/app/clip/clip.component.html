@@ -1,0 +1,77 @@
+<p-messages [(value)]="msgs"></p-messages>
+
+<form #form="ngForm" (ngSubmit)="form.valid && saveClip()" novalidate >
+    <p-panel header="Nuevo Clip">
+        <div class="row">
+            <div class="ui-g ui-fluid form-group">
+              <div class="ui-g-12 ui-md-12 ui-lg-2" style="margin-left:1%;">
+                <label>Name </label>
+                <label style="color:red;">*</label>
+              </div>
+              <div  class="ui-g-12 ui-md-12 ui-lg-8">
+                  <input id="iName" type="text" pInputText [(ngModel)]="newClip.name" name="nameClip"
+                    required #nameClip=ngModel placeholder="Clip´s name" maxlength="100"/>          
+              </div>
+              <div class="ui-g-12 ui-md-12 ui-lg-1">
+                <i  style="line-height: 2.5em" title="" class="pi pi-info-circle" pTooltip="Name of the clip" tooltipPosition="right"></i>
+              </div>
+              <div  class="ui-g-12 ui-md-12 ui-lg-10, error" *ngIf="nameClip.errors && (nameClip.dirty || nameClip.touched && !form.form.controls.nameClip?.valid)">
+                <div [hidden]="!nameClip.errors.required" class="message-error">
+                  Name required
+                </div>
+              </div>  
+            </div>
+        </div>
+
+        <div class="row">
+          <div class="ui-g ui-fluid form-group">
+            <div class="ui-g-12 ui-md-12 ui-lg-2" style="margin-left:1%;">
+              <label>Start time </label>
+              <label style="color:red;">*</label>
+            </div>
+            <div  class="ui-g-12 ui-md-12 ui-lg-8">
+                <p-inputMask id="cStartTime" name="startTime" #startTime=ngModel mask="99:99"  [(ngModel)]="newClip.startTime" required placeholder="01:50"></p-inputMask>
+              </div>
+            <div class="ui-g-12 ui-md-12 ui-lg-1">
+              <i  style="line-height: 2.5em" title="" class="pi pi-info-circle" pTooltip="Minute and second of start clip. The format is mm:ss" tooltipPosition="right"></i>
+            </div>
+            <div  class="ui-g-12 ui-md-12 ui-lg-10, error" *ngIf="startTime.errors && (startTime.dirty || startTime.touched && !form.form.controls.startTime?.valid)">
+              <div [hidden]="!startTime.errors.required" class="message-error">
+                Start time is required
+              </div>
+              <div [hidden]="!startTime.errors.pattern" class="message-error">
+                Format is incorrect.
+              </div>
+            </div>  
+          </div>
+      </div>
+
+      <div class="row">
+        <div class="ui-g ui-fluid form-group">
+          <div class="ui-g-12 ui-md-12 ui-lg-2" style="margin-left:1%;">
+            <label>Final time </label>
+            <label style="color:red;">*</label>
+          </div>
+          <div  class="ui-g-12 ui-md-12 ui-lg-8">
+            <p-inputMask id="cEndTime" name="endTime"  #endTime=ngModel mask="99:99"  [(ngModel)]="newClip.endTime" required placeholder="02:50"></p-inputMask>
+          </div>
+          <div class="ui-g-12 ui-md-12 ui-lg-1">
+            <i  style="line-height: 2.5em" title="" class="pi pi-info-circle" pTooltip="Minute and second of end clip. The format is mm:ss" tooltipPosition="right"></i>
+          </div>
+          <div  class="ui-g-12 ui-md-12 ui-lg-10, error" *ngIf="endTime.errors && (endTime.dirty || endTime.touched && !form.form.controls.endTime?.valid)">
+            <div [hidden]="!endTime.errors.required" class="message-error">
+              Final time is required
+            </div>
+            <div [hidden]="!startTime.errors.pattern" class="message-error">
+              Format is incorrect.
+            </div>
+          </div>  
+        </div>
+      </div>
+  
+      <p-footer>
+          <button pButton type="submit" icon="pi pi-check" label="Save" class="ui-button-success" style="margin-right: .25em" [disabled]="!form.form.valid"></button>
+          <button pButton type="button" icon="pi pi-times" label="Cancel" class="ui-button-info" (click)="cancelClip()"></button>
+      </p-footer>
+    </p-panel>
+</form>

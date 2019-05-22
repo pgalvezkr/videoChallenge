@@ -1,0 +1,71 @@
+<div class="p-grid" *ngIf="showVideoPlayer">
+  <div class="p-col-12 p-md-6 p-lg-12" style="width: 75%; height: 50px;  margin-left: 15%; margin-top: 2%;">
+    <p-panel>
+        <p-header>
+            <div class="ui-helper-clearfix, p-grid">
+                <div class="p-col-12 p-md-6 p-lg-6">
+                   <span class="ui-panel-title, " style="font-size:16px;display:inline-block;margin-top:2px">Video Player</span>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-6">
+                  <button pButton type="button" style="float: right;" label="New clip" class="ui-button-rounded ui-button-success" (click) = "createClip()"></button>
+                </div>  
+            </div>
+        </p-header>
+        <div class="p-grid">
+                <div class="p-lg-6">
+                    <video id="vVideoPlayer" controls style="width: 90%;">
+                      <source src="{{pathVideo}}">
+                    </video>
+                </div>
+                <div class="p-lg-6">
+                    <p-table [columns]="cols" #dtVideos [value]="videos" [responsive]="true" [style]="{'width': '100%'}" [paginator]="true" [rows]="3">
+                        <ng-template pTemplate="caption">
+                            <div style="text-align: right">        
+                                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                                <input type="text" pInputText size="50" placeholder="Global Filter" (input)="dtVideos.filterGlobal($event.target.value, 'contains')" style="width:auto">
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th *ngFor="let col of columns">
+                                    {{col.header}}
+                                </th>
+                                <th style="width:4em"></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr>
+                                <td *ngFor="let col of columns">
+                                     {{rowData[col.field]}}
+                                </td>
+                                <td>
+                                    <div class="row">
+                                        <div class="p-lg-4">
+                                            <button pButton icon="pi pi-pencil" (click)="editVideo(rowData)" pTooltip="Edit the clip" tooltipPosition="right"></button>
+                                        </div>
+                                        <div class="p-lg-4">
+                                            <button pButton icon="pi pi-trash" (click)="confirmDeleteVideo(rowData)" *ngIf="!rowData.isFather" pTooltip="Delete the clip" tooltipPosition="right"></button>
+                                        </div>
+                                        <div class="p-lg-4">
+                                            <button pButton icon="pi pi-angle-right" (click)="playVideo(rowData)" pTooltip="Play the clip" tooltipPosition="right"></button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+        </div>
+    </p-panel>    
+  </div>
+</div>
+
+<app-clip (videosEmmitter)= "getVideos($event)" [newClip]="videoSelected"  [videos]="videos" *ngIf="showForm"> </app-clip>
+
+<p-confirmDialog header="Confirmation" icon="pi pi-question-circle" width="425" appendTo="body" key="confirmDelete" #modalDelete>
+        <p-footer>
+          <button pButton type="button"  label="Cancel" (click)="modalDelete.reject();" icon="pi pi-times" style="margin-top: 0.7%; width: 90px !important;"></button>
+          <button pButton type="button"  label="Accept" icon="pi pi-check" (click)="deleteVideo(); modalDelete.reject();"
+            style="margin-top: 0.7%; width: 90px !important;"></button>
+        </p-footer>
+</p-confirmDialog>
